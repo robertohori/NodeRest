@@ -20,7 +20,9 @@ app.use('/api/authenticate',authenticateRouter);
 config = new Config;
 
 app.set('superSecret',config.secret.secret);
-
+app.get('/',function(req,res){
+    res.send('welcome');
+});
 app.use(function(req,res,next){
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -57,9 +59,7 @@ app.use('/api/books',bookRouter);
 //
 
 
-app.get('/',function(req,res){
-    res.send('welcome');
-});
+
 
 app.listen(port, function(){
    console.log('Running on port:'+port);
