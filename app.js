@@ -72,8 +72,10 @@ app.use(function(req,res,next){
 });
 userRouter = require("./routes/userRoutes")(pool);
 nfcTapUserRouter = require("./routes/nfcTapUserRoutes")(pool);
+blogRouter = require("./routes/blogRoutes")(pool);
 app.use('/api/users',userRouter);
 app.use('/api/nfc',nfcTapUserRouter);
+app.use('/api/blog',blogRouter);
 //
 
 
