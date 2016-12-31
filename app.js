@@ -1,30 +1,46 @@
 var express = require('express'),
-    mongoose = require("mongoose"),
+ //   mongoose = require("mongoose"),
     bodyParser = require("body-parser");
 
-var db = mongoose.connect('mongodb://localhost/bookAPI');
-var  Book = require("./models/bookModel");
-var  User = require("./models/userModel");
-var Config = require("./config.js");
+//var db = mongoose.connect('mongodb://localhost/keswickPI');
+//var  User = require("./models/userModel");
 
+var Config = require("./config.js");
+var mysql = require('mysql'),
+    connectionsArray = [];
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT ||4000;
+pool = mysql.createPool({
+    host : '127.0.0.1',
+    user : 'root',
+    password : '!@#123roberto',
+    database : 'nfc'
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-bookRouter = require("./routes/bookRoutes")(Book);
-userRouter = require("./routes/userRoutes")(User);
-authenticateRouter = require("./routes/authenticateRoutes")(User);
-
+authenticateRouter = require("./routes/authenticateRoutes")(pool);
 app.use('/api/authenticate',authenticateRouter);
-config = new Config;
-
-app.set('superSecret',config.secret.secret);
 app.get('/',function(req,res){
     res.send('welcome');
 });
+
+
+
+
+config = new Config;
+
+
+
+
+
+
+app.set('superSecret',config.secret.secret);
+
+
 app.use(function(req,res,next){
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    //console.log(token);
 
     // decode token
     if (token) {
@@ -36,7 +52,8 @@ app.use(function(req,res,next){
             } else {
                 // if everything is good, save to request for use in other routes
 
-                console.log(decoded);
+                //console.log(decoded);
+                req.decoded = decoded;
                 next();
             }
         });
@@ -51,11 +68,12 @@ app.use(function(req,res,next){
         });
 
     }
+
 });
-
+userRouter = require("./routes/userRoutes")(pool);
+nfcTapUserRouter = require("./routes/nfcTapUserRoutes")(pool);
 app.use('/api/users',userRouter);
-app.use('/api/books',bookRouter);
-
+app.use('/api/nfc',nfcTapUserRouter);
 //
 
 
@@ -64,3 +82,4 @@ app.use('/api/books',bookRouter);
 app.listen(port, function(){
    console.log('Running on port:'+port);
 });
+

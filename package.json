@@ -2,7 +2,7 @@
   "name": "bookapi",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "servernpm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +13,7 @@
     "express": "^4.13.4",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.0.7",
-    "mongoose": "^4.4.17"
+    "mongoose": "^4.4.17",
+    "mysql": "^2.12.0"
   }
 }

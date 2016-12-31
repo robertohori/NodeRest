@@ -1,7 +1,7 @@
 var mongoose=require('mongoose');
 var Schema = mongoose.Schema;
 
-var clientModel = new Schema({
+var profModel = new Schema({
     rfid:{type:String},
     name:{type:String },
     email:{type:String},
@@ -13,25 +13,20 @@ var clientModel = new Schema({
     number:{type:String},
     country:{type:String},
     contact:[{phone:{type:String},emergency:{type:String}}],
-    membership:
+    class:
         [{
-            fee:{type:String},
-            meth_pay:{type:String},
-            last_pay:{type:Date},
-            term_begin:{type:Date},
-            term_end:{type:Date},
-            day_pay:{type:String},
-            stop_status:{type:String},
-            stop_begin:{type:Date},
-            stop_end:{type:Date}
+            name:{type:String},
+            week:{type:String},
+            hour_begin:{type:Date},
+            hour_end:{type:Date}
+
         }],
-    family_member:[{name:{type:String },id_cli:{type:String }}],
-    active_on_class:{type:String},
+    active_on_class:{type:Boolean},
     attend:
         [{
-            id_prof:{type:String},
+            id_client:{type:String},
             data:{type:Date}
         }]
 });
 
-module.exports = mongoose.model('Client',clientModel);
+module.exports = mongoose.model('Prof',profModel);

@@ -1,34 +1,33 @@
-var bookIdController = function(Book){
+var clientIdController = function(Client){
 
     var byId = function(req,res,next){
-        Book.findById(req.params.bookId,function(err,book){
+        Client.findById(req.params.clientId,function(err,client){
             if(err)
                 res.status(500).send(err);
-            else if(book)
+            else if(client)
             {
-                req.book = book;
+                req.client = client;
                 next();
             }else{
-                res.status(404).send('no book found');
+                res.status(404).send('no client found');
             }
 
         });
     };
 
         var get = function(req,res){
-            res.json(req.book);
+            res.json(req.client);
         };
 
         var put = function(req,res){
-            req.book.title = req.body.title;
-            req.book.author = req.body.author;
-            req.book.genre = req.body.genre;
-            req.book.read = req.body.read;
-            req.book.save(function(err){
+            req.client.name = req.body.name;
+            req.client.email = req.body.email;
+
+            req.client.save(function(err){
                 if (err){
                     res.status(500).send(err);
                 } else{
-                    res.json(req.book);
+                    res.json(req.client);
                 }
             });
         };
@@ -38,19 +37,19 @@ var bookIdController = function(Book){
                 delete req.body._id;
             for(var p in req.body)
             {
-                req.book[p] = req.body[p];
+                req.client[p] = req.body[p];
             }
-            req.book.save(function(err){
+            req.client.save(function(err){
                 if (err){
                     res.status(500).send(err);
                 } else{
-                    res.json(req.book);
+                    res.json(req.client);
                 }
             })
         };
 
         var del = function(req,res){
-            req.book.remove(function(err){
+            req.client.remove(function(err){
                 if(err){
                     res.status(500).send(err);
                 }else{
@@ -68,4 +67,4 @@ var bookIdController = function(Book){
 
     }
 };
-module.exports = bookIdController;
+module.exports = clientIdController;
