@@ -1,4 +1,5 @@
     var express = require("express");
+    
     var routes = function(pool)
     {
         var nfcTapUserRouter = express.Router();

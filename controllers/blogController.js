@@ -2,6 +2,47 @@ var param = require('jquery-param');
 var blogController = function(pool){
 
 
+var remove = function(req,res){
+     
+        id_blog = req.params.id_blog ;
+  
+        if(id_blog){
+
+        pool.getConnection(function(err, connection) {
+
+
+            var query = connection.query('DELETE FROM tb_blog where id_blog=?', id_blog, function(err, resuslt){
+                if (!err){
+
+                    res.status(201).send({ success: true, message: 'Cadastro excluido',data: id_blog });
+                }else{
+                    if (typeof query !=="undefined"){
+                        query = query.sql;
+                    }else
+                    {
+                        query = "undefined"
+                    }
+                    var query2 = connection.query('INSERT INTO tb_logs (error,name_table,query) values ("'+err+'","tb_blog","remove","'+query+'")', function(err2, resuslt){
+                        if(err2){
+
+                        }
+                    });
+
+                    res.status(500).json({ success: false, message: err,data:{} });
+
+                }
+            });
+          //  console.log(query.sql);
+            connection.release();
+         //   connection.end();
+
+
+        });
+        }else{
+     res.status(500).json({ success: false, message: "Id nao indentificado",data:{}});
+}
+
+        }
 
     var post = function(req,res){
         console.log("post")
@@ -50,7 +91,7 @@ var blogController = function(pool){
 
     };
     var get = function(req,res){
-        console.log("get")
+      //  console.log("get")
        var query_i ="";
        var type = req.headers['type'];
         if (type ==='1'){
@@ -62,18 +103,21 @@ var blogController = function(pool){
 
 
         pool.getConnection(function(err, connection) {
-            if(req.query ){
+            var query = req.query; 
+            if (query ===null)
+                    query = false;
+            if(query ){
                 post_t = req.query
                 for(var p in post_t)
                 {
-                    query_i +=" "+type+" " + p+" like "+connection.escape(post_t[p])+"" ;
+                    query_i +=" "+type+" " + p+" like '%"+post_t[p]+"%'" ;
                 }
                 query_i = query_i.substring(4);
-              //  console.log(post_t);
+                
 
 
             }
-            if (typeof query_i ==="undefined"){
+            if (typeof query_i ==="undefined" || query_i ===''){
                 query_i = "1=1";
             }
 
@@ -186,7 +230,8 @@ var blogController = function(pool){
     return{
         post:post,
         get:get,
-        put:put
+        put:put,
+        remove:remove
 
 
     }

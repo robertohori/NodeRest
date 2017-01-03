@@ -1,14 +1,16 @@
-    var express = require("express");
-    var routes = function(pool)
+
+module.exports = function(pool,app)
     {
-        var blogRouter = express.Router();
+       // var blogRouter = express.Router();
         var blogController = require('../controllers/blogController')(pool);
-        blogRouter.route('/')
+       
+        app.route('/api/blog')
             .post(blogController.post)
-            .get(blogController.get)
-        .put(blogController.put);
+            .get(blogController.get);
 
-        return blogRouter;
+        app.route('/api/blog/:id_blog')
+            .put(blogController.put)
+             .delete(blogController.remove);
+
+      //  return blogRouter;
     };
-
-module.exports = routes;
