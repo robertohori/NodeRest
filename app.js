@@ -79,8 +79,6 @@ app.use('/api/users',userRouter);
 app.use('/api/nfc',nfcTapUserRouter);
 //app.use(blogRouter);
 
-app.use('/api/blog/:id_blog',blogRouter);
-
 
 
 

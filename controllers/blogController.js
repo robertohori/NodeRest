@@ -4,12 +4,13 @@ var blogController = function(pool){
 
 var remove = function(req,res){
      
-        id_blog = req.params.id_blog ;
+       
+    
   
         if(id_blog){
 
         pool.getConnection(function(err, connection) {
-
+            id_blog = connection.escape(req.params.id_blog) ;
 
             var query = connection.query('DELETE FROM tb_blog where id_blog=?', id_blog, function(err, resuslt){
                 if (!err){
